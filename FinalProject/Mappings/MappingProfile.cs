@@ -3,7 +3,9 @@ using AutoMapper;
 using FinalProject.Models;
 using FinalProject.ViewModels.Brand;
 using FinalProject.ViewModels.Category;
+using FinalProject.ViewModels.Post;
 using FinalProject.ViewModels.Product;
+using FinalProject.ViewModels.Whislist;
 
 namespace FinalProject.Mappings
 {
@@ -19,6 +21,14 @@ namespace FinalProject.Mappings
 
             CreateMap<Product, CreateProduct>().ReverseMap();
             CreateMap<Product, UpdateProduct>().ReverseMap();
+            CreateMap<Product, GetProduct>().ReverseMap();
+            CreateMap<Product, GetAdminProduct>().ReverseMap();
+
+            CreateMap<Post, GetPost>().ReverseMap();
+            CreateMap<Post, CreatePost>().ReverseMap();
+            CreateMap<Post, UpdatePost>().ReverseMap();
+
+            CreateMap<Whislist, CreateWistlist>().ReverseMap();
         }
     }
 }

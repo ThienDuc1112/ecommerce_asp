@@ -9,10 +9,12 @@ namespace FinalProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Body { get; set; }
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public User User { get; set; }
-        public int Reaction { get; set; } = 0;
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

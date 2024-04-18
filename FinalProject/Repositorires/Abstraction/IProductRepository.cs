@@ -9,5 +9,7 @@ namespace FinalProject.Repositorires.Abstraction
         Task<bool> IsExisted(string name);
         Task<DisplayingProduct> GetListProduct(int page, string query);
         Task<GetDetailProduct> GetDetailProduct(int id);
+        Task<IEnumerable<Product>> GetNewestProducts();
+        Task<DisplayingAdminProduct> GetAdminListProduct(int page, string query);
     }
 }

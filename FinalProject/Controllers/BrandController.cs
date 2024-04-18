@@ -31,6 +31,18 @@ namespace FinalProject.Controllers
             return Ok(brands);
         }
 
+        [HttpGet("Detail")]
+        public async Task<ActionResult<Brand>> GetDetail([FromQuery(Name ="id")] int id)
+        {
+            var brand = await _brandRepository.GetById(id);
+            if(brand == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(brand);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Status>> Add([FromBody] AddBrand brandVM)
         {

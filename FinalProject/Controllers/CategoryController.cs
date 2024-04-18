@@ -33,6 +33,18 @@ namespace FinalProject.Controllers
             return Ok(categories);
         }
 
+        [HttpGet("Detail")]
+        public async Task<ActionResult<Category>> GetDetail([FromQuery(Name = "id")] int id)
+        {
+            var category = await _categoryRepository.GetById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Status>> Add([FromBody] AddCategory categoryVM)
         {

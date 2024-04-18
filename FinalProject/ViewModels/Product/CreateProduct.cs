@@ -20,5 +20,7 @@ namespace FinalProject.ViewModels.Product
         public int BrandId { get; set; }
         [Required]
         public int Quantity { get; set; }
+        [Required]
+        public DateTime CreatedDate { get; set; }
     }
 }

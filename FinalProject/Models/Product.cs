@@ -16,8 +16,8 @@ namespace FinalProject.Models
         public int CategoryId { get; set; }
         public int BrandId { get; set; }
         public int Quantity { get; set; }
-        public int TotalAmount { get; set; } = 1;
         public bool IsDeleted { get; set; } = false;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
         [ForeignKey("BrandId")]
