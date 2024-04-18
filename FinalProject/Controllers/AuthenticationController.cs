@@ -1,6 +1,7 @@
 ﻿using FinalProject.Repositorires.Abstraction;
 using FinalProject.ViewModels;
 using FinalProject.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
@@ -65,6 +66,13 @@ namespace FinalProject.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+            return Ok("authen success");
         }
     }
 }

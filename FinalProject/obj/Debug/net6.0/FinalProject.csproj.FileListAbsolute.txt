@@ -501,3 +501,5 @@ D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\obj\Debug\net6.0\refin
 D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\obj\Debug\net6.0\FinalProject.pdb
 D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\obj\Debug\net6.0\FinalProject.genruntimeconfig.cache
 D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\obj\Debug\net6.0\ref\FinalProject.dll
+D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\bin\Debug\net6.0\AutoMapper.dll
+D:\helper\Tai\Code\FinalApp1682\FinalProject\FinalProject\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

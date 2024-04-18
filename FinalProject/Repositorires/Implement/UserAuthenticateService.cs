@@ -13,8 +13,8 @@ namespace FinalProject.Repositorires.Implement
 {
     public class UserAuthenticateService : IUserAuthenticationService
     {
-        private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppDbContext _db;
         private readonly IConfiguration _configuration;
@@ -23,18 +23,18 @@ namespace FinalProject.Repositorires.Implement
             IHttpContextAccessor httpContextAccessor, AppDbContext db)
         {
             _configuration = configuration;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _httpContextAccessor = httpContextAccessor;
             _db = db;
         }
 
         public async Task<JwtToken> LoginAsync(LoginModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var userRoles = await userManager.GetRolesAsync(user);
+                var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
                 {
@@ -56,14 +56,16 @@ namespace FinalProject.Repositorires.Implement
 
                 return jwtToken;
             }
-
-            throw new Exception("Invalid email or password");
+            else
+            {
+                throw new Exception("Invalid email or password");
+            }
         }
 
         public async Task<Status> RegisterAsync(RegisterModel model)
         {
             var status = new Status();
-            var userExists = await userManager.FindByEmailAsync(model.Email);
+            var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
                 status.IsSuccess = false;
@@ -74,14 +76,14 @@ namespace FinalProject.Repositorires.Implement
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                UserName = model.FirstName.Replace(" ", ""),
+                UserName = model.Email,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
             try
             {
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
                 await _db.SaveChangesAsync();
 
                 if (!result.Succeeded)
@@ -96,14 +98,14 @@ namespace FinalProject.Repositorires.Implement
                 }
                 else
                 {
-                    if (!await roleManager.RoleExistsAsync(model.Role))
+                    if (!await _roleManager.RoleExistsAsync(model.Role))
                     {
-                        await roleManager.CreateAsync(new IdentityRole(model.Role));
+                        await _roleManager.CreateAsync(new IdentityRole(model.Role));
                     }
 
-                    if (await roleManager.RoleExistsAsync(model.Role))
+                    if (await _roleManager.RoleExistsAsync(model.Role))
                     {
-                        await userManager.AddToRoleAsync(user, model.Role);
+                        await _userManager.AddToRoleAsync(user, model.Role);
                     }
                     status.IsSuccess = true;
                     status.Message = "registering succesfully";
