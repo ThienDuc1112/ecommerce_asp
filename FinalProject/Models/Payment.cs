@@ -14,5 +14,6 @@ namespace FinalProject.Models
         public string PaymentMethod { get; set; }
         public string? TransactionID { get; set; }
         public string Status { get; set; }
+
     }
 }

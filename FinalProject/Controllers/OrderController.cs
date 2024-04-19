@@ -1,5 +1,7 @@
 ﻿using FinalProject.Context;
 using FinalProject.Models;
+using FinalProject.Repositorires.Abstraction;
+using FinalProject.Repositorires.Implement;
 using FinalProject.Services;
 using FinalProject.ViewModels;
 using FinalProject.ViewModels.Cart;
@@ -14,11 +16,13 @@ namespace FinalProject.Controllers
     public class OrderController : Controller
     {
         private const string SessionKeyName = "_Cart";
+        private IOrderRepository _orderRepository;
         private AppDbContext _appDbContext { get; set; }
 
-        public OrderController(AppDbContext appDbContext)
+        public OrderController(AppDbContext appDbContext, IOrderRepository orderRepository)
         {
             _appDbContext = appDbContext;
+            _orderRepository = orderRepository;
         }
 
         [HttpPost]
@@ -91,5 +95,99 @@ namespace FinalProject.Controllers
 
             return status;
         }
+
+        [HttpGet("GetOrdersByCustomer")]
+        public async Task<ActionResult<IEnumerable<GetCustomerOrder>>> GetOrdersByCustomer([FromQuery(Name = "userId")] string userId)
+        {
+            var orders = await _orderRepository.GetCustomerOrders(userId);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
+
+        [HttpGet("GetOrdersByAdmin")]
+        public async Task<ActionResult<OrderAdminDashboard>> GetOrdersByAdmin([FromQuery(Name = "page")] int page = 1)
+        {
+            var order = await _orderRepository.GetAdminListOrder(page);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+        [HttpGet("GetOrderDetail")]
+        public async Task<ActionResult<GetOrderDetail>> GetOrderDetail([FromQuery(Name = "id")] int id)
+        {
+            var order = await _orderRepository.GetOrderDetail(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+
+        [HttpPut("DeleteForCustomer")]
+        public async Task<ActionResult> DeleteForCustomer([FromQuery(Name = "id")] int id)
+        {
+            var order = await _orderRepository.GetById(id);
+            if (order == null)
+            {
+                return BadRequest("not found");
+            }
+            else
+            {
+                order.IsDeleted = true;
+                await _orderRepository.Update(order);
+
+                return NoContent();
+            }
+        }
+
+        [HttpPut("Update")]
+        public async Task<ActionResult<Status>> Update([FromBody] UpdateOrder updateOrder)
+        {
+            Status status = new Status();
+            if (!ModelState.IsValid)
+            {
+                status.IsSuccess = false;
+                status.Message = "invalid model";
+                return BadRequest(status);
+            }
+
+            var order = await _orderRepository.GetById(updateOrder.Id);
+            if (order == null)
+            {
+                status.IsSuccess = false;
+                status.Message = $"can't find order with id: {updateOrder.Id}";
+                return NotFound(status);
+            }
+
+            order.Status = updateOrder.Status;
+            await _orderRepository.Update(order);
+            status.IsSuccess = true;
+            status.Message = "update successfully";
+            return Ok(status);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete([FromQuery(Name ="id")] int id)
+        {
+            var order = await _orderRepository.GetById(id); 
+            if(order == null)
+            {
+                return NotFound();
+            }
+            await _orderRepository.Delete(order);
+
+            return NoContent();
+        }
+
     }
 }
