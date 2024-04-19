@@ -10,8 +10,6 @@ namespace FinalProject.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int OrderId { get; set; }
-        [Column(TypeName = "Money")]
-        public decimal Price { get; set; }
         public int Quantity { get; set; }
         [ForeignKey("OrderId")]
         public Order Order { get; set; }

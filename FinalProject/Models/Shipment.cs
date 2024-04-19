@@ -10,8 +10,8 @@ namespace FinalProject.Models
         public int Id { get; set; }
         public string ShippingAdddress { get; set; }
         public string ZipCode { get; set; }
-        public DateTime EstimatedDeliveryDate { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime EstimatedDeliveryDate { get; set; } = DateTime.Now.AddDays(7);
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string Status { get; set; } = "Pending";
 
 

@@ -11,5 +11,6 @@ namespace FinalProject.Repositorires.Abstraction
         Task<GetDetailProduct> GetDetailProduct(int id);
         Task<IEnumerable<Product>> GetNewestProducts();
         Task<DisplayingAdminProduct> GetAdminListProduct(int page, string query);
+        Task<Product> GetProductWithRelevant(int id);
     }
 }

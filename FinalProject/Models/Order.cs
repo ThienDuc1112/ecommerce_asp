@@ -9,9 +9,11 @@ namespace FinalProject.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int Payment { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public int PaymentId { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string CustomerName { get; set; }
         [Column(TypeName = "Money")]
         public decimal TotalAmount { get; set; }
         public bool IsDeleted { get; set; } = false;
@@ -22,6 +24,8 @@ namespace FinalProject.Models
         public int ShipmentId { get; set; }
         [ForeignKey("ShipmentId")]
         public Shipment Shipment { get; set; }
+        [ForeignKey("PaymentId")]
+        public Payment Payment { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
 
     }

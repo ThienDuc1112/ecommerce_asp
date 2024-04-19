@@ -14,8 +14,5 @@ namespace FinalProject.Models
         public string PaymentMethod { get; set; }
         public string? TransactionID { get; set; }
         public string Status { get; set; }
-        public int OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
     }
 }

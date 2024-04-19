@@ -106,6 +106,12 @@ namespace FinalProject.Repositorires.Implement
                 .ToListAsync();
         }
 
+        public async Task<Product> GetProductWithRelevant(int id)
+        {
+            return await _dbContext.Products.Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
         public async Task<bool> IsExisted(string name)
         {
             return await _dbContext.Products.AnyAsync(p => p.Title == name);
