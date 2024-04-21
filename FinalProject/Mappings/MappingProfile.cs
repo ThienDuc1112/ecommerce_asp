@@ -5,6 +5,7 @@ using FinalProject.ViewModels.Brand;
 using FinalProject.ViewModels.Category;
 using FinalProject.ViewModels.Post;
 using FinalProject.ViewModels.Product;
+using FinalProject.ViewModels.Users;
 using FinalProject.ViewModels.Whislist;
 
 namespace FinalProject.Mappings
@@ -29,6 +30,8 @@ namespace FinalProject.Mappings
             CreateMap<Post, UpdatePost>().ReverseMap();
 
             CreateMap<Whislist, CreateWistlist>().ReverseMap();
+            CreateMap<User, GetUser>().ReverseMap();
+            CreateMap<User, UpdateUser>().ReverseMap();
         }
     }
 }

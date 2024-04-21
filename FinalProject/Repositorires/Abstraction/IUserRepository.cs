@@ -1,6 +1,10 @@
-﻿namespace FinalProject.Repositorires.Abstraction
+﻿using FinalProject.Models;
+using FinalProject.Repositorires.Implement;
+
+namespace FinalProject.Repositorires.Abstraction
 {
-    public class IUserRepository
+    public interface IUserRepository : IGenericRepository<User>
     {
+        Task<User> GetUser(string userId);
     }
 }

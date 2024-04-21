@@ -38,8 +38,13 @@ namespace FinalProject.Repositorires.Implement
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    //new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("UserId", user.Id), 
+                    new Claim("UserName", user.UserName), 
+                    new Claim("FirstName", user.FirstName),
+                    new Claim("LastName", user.LastName),
+                    new Claim("Email", user.Email),
                 };
 
                 foreach (var userRole in userRoles)

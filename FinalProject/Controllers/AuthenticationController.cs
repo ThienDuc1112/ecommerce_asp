@@ -1,7 +1,10 @@
-﻿using FinalProject.Repositorires.Abstraction;
+﻿using AutoMapper;
+using FinalProject.Models;
+using FinalProject.Repositorires.Abstraction;
 using FinalProject.ViewModels;
 using FinalProject.ViewModels.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
@@ -11,10 +14,17 @@ namespace FinalProject.Controllers
     public class AuthenticationController : Controller
     {
         private IUserAuthenticationService userAuthenticationService;
+        private IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public AuthenticationController(IUserAuthenticationService userAuthenticationService)
+        public AuthenticationController(IUserAuthenticationService userAuthenticationService, IUserRepository userRepository
+            , IMapper mapper, UserManager<User> userManager)
         {
             this.userAuthenticationService = userAuthenticationService;
+            _userRepository = userRepository;
+            _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost("login")]
@@ -68,11 +78,64 @@ namespace FinalProject.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Test()
+
+        [HttpGet("GetProfile")]
+        public async Task<IActionResult> ViewProfile(string userId)
         {
-            return Ok("authen success");
+            var user = await _userRepository.GetUser(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+           GetUser userVM = _mapper.Map<GetUser>(user);
+            return Ok(userVM);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Status>> Update([FromBody] UpdateUser userVM)
+        {
+            Status status = new Status();
+
+            if (!ModelState.IsValid)
+            {
+                status.IsSuccess = false;
+                status.Message = "Invalid model";
+                return Ok(status);
+            }
+
+            var user = await _userRepository.GetUser(userVM.UserId);
+            if (user == null)
+            {
+                status.IsSuccess = false;
+                status.Message = $"User with ID {userVM.UserId} does not exist.";
+                return NotFound(status);
+            }
+            var userExists = await _userManager.FindByEmailAsync(userVM.Email);
+            if (userExists != null )
+            {
+                if(userVM.Email != userExists.Email)
+                {
+                    status.IsSuccess = false;
+                    status.Message = "This email already exists";
+                    return Ok(status);
+                }
+            }
+
+            _mapper.Map(userVM, user);
+
+            try
+            {
+                await _userRepository.Update(user);
+                status.IsSuccess = true;
+                status.Message = "Update successful";
+                return Ok(status);
+            }
+            catch (Exception ex)
+            {
+                status.IsSuccess = false;
+                status.Message = "An error occurred while updating the user.";
+                return StatusCode(500, status);
+            }
         }
     }
 }
