@@ -29,7 +29,7 @@ namespace FinalProject.Controllers
         public async Task<ActionResult<Status>> PerformOrder([FromBody] CreateOrder createOrder)
         {
             Status status = new Status();
-            var cart = HttpContext.Session.GetObjectFromJson<List<GetCart>>(SessionKeyName);
+            //var cart = HttpContext.Session.GetObjectFromJson<List<GetCart>>(SessionKeyName);
             if (ModelState.IsValid)
             {
                 using (var transaction = _appDbContext.Database.BeginTransaction())
@@ -59,7 +59,7 @@ namespace FinalProject.Controllers
                         };
                         await _appDbContext.Orders.AddAsync(order);
                         await _appDbContext.SaveChangesAsync();
-                        foreach (var item in cart)
+                        foreach (var item in createOrder.Carts)
                         {
                             var orderDetail = new OrderDetail
                             {

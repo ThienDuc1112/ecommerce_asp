@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FinalProject.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/[Controller]")]
     public class CartController : Controller
     {
         private const string SessionKeyName = "_Cart";
@@ -18,7 +18,7 @@ namespace FinalProject.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpGet]
+        [HttpGet("Detail")]
         public async Task<ActionResult<IEnumerable<GetCart>>> GetCart()
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<GetCart>>(SessionKeyName);

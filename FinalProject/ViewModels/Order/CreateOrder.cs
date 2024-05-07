@@ -1,4 +1,5 @@
 ﻿
+using FinalProject.ViewModels.Cart;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinalProject.ViewModels.Order
@@ -34,6 +35,8 @@ namespace FinalProject.ViewModels.Order
         public string TransactionID { get; set; }
         [Required]
         public string Status { get; set; }
+
+        public List<CartDTO> Carts { get; set; } = new List<CartDTO>(){ };
 
     }
 }
